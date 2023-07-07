@@ -14,20 +14,6 @@ const Groc = () => {
     fetchData();
   }, [])
 
-  const rightButtons = [
-    <TouchableOpacity style={{backgroundColor:'lightgrey',
-    height:'87%',marginVertical:'2%',justifyContent:'center',borderRadius:10}}>
-      <Text style={{color:'black',marginLeft:'2%'}}>Delete</Text>
-      </TouchableOpacity>,
-    // <TouchableOpacity style={{backgroundColor:'lightyellow',height:'85%',marginVertical:'2%',justifyContent:'center',}}>
-    //   <Text style={{color:'black'}}>Button 2</Text>
-    //   </TouchableOpacity>
-  ];
-  // const leftButtons = [
-  //   <TouchableOpacity >
-  //     <Text style={{color:'black',marginLeft:320}}>Button 1</Text>
-  //     </TouchableOpacity>,
-  // ];
   const fetchData = async () => {
     //AsyncStorage.clear()
     try {
@@ -47,15 +33,14 @@ const Groc = () => {
 
 
   const handleSubmit = async () => {
-    // const obj=[{groc:grocery,price:price,Quan:quantity}]
-    console.log()
+
     if (editSubmit == false) {
       console.log("entered in norwml submit")
       if (!grocery || !price || !quantity) {
         Alert.alert("please fill something")
         return;
       }
-     
+
       try {
         await AsyncStorage.setItem('data', JSON.stringify([...arr, { groc: grocery, price: price, Quan: quantity, id: Math.floor(Math.random() * 1000) }]))
 
@@ -74,14 +59,16 @@ const Groc = () => {
       }
     }
     if (editSubmit == true) {
-      console.log("entered in false submit")
-      console.log("id from true",id)
-      const obj=arr.map( item  => {
-        
+      if (!grocery || !price || !quantity) {
+        Alert.alert("please fill something")
+        return;
+      }
+      const obj = arr.map(item => {
+
         if (item.id == id) {
-         item.groc=grocery;
-         item.Quan=quantity;
-         item.price=price
+          item.groc = grocery;
+          item.Quan = quantity;
+          item.price = price
 
         }
         return item;
@@ -108,22 +95,19 @@ const Groc = () => {
 
   const edit = async (groc, quan, pri, Id) => {
     setEditSubmit(true)
-    console.log("edit id",Id)
     setGrocery(groc)
     setQuantity(quan)
     setPrice(pri)
     setId(Id)
-   
+
   }
 
 
-  const remove = async(Id) => {
+  const remove = async (Id) => {
     setArr(arr.filter(item => item.id !== Id))
     try {
-      
+
       await AsyncStorage.setItem('data', JSON.stringify(arr))
-     // console.log(arr)
-     // setEditSubmit(false)
       cleartext();
     }
     catch {
@@ -132,18 +116,18 @@ const Groc = () => {
   }
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-     <View style={{}}>
+      <View>
         <TextInput placeholder='Enter Item ' value={grocery} placeholderTextColor={'black'}
-          onChangeText={(t) => { setGrocery(t) }} style={{ borderRadius: 10, borderWidth: 1, margin: '4%', color: 'black' }} />
+          onChangeText={(t) => { setGrocery(t) }} style={{ borderRadius: 10, borderWidth: 1, marginHorizontal: '4%', marginVertical: '2%', color: 'black' }} />
         <TextInput placeholder='Enter Quantity ' value={quantity} placeholderTextColor={'black'}
-          onChangeText={(t) => { setQuantity(t) }} style={{ borderRadius: 10, borderWidth: 1, margin: '4%', color: 'black' }} />
+          onChangeText={(t) => { setQuantity(t) }} style={{ borderRadius: 10, borderWidth: 1, marginHorizontal: '4%', marginVertical: '2%', color: 'black' }} />
         <TextInput placeholder='Enter Price ' value={price} placeholderTextColor={'black'}
-          onChangeText={(t) => { setPrice(t) }} style={{ borderRadius: 10, borderWidth: 1, margin: '4%', color: 'black' }} />
+          onChangeText={(t) => { setPrice(t) }} style={{ borderRadius: 10, borderWidth: 1, marginHorizontal: '4%', marginVertical: '2%', color: 'black' }} />
       </View>
-      <View style={{ justifyContent: 'flex-end',width: "100%",marginBottom:'3%' }}>
+      <View style={{ justifyContent: 'flex-end', width: "100%", marginVertical: '2%' }}>
         <TouchableOpacity style={{
-          width: '90%', backgroundColor: 'black',
-          borderRadius: 10, height: 40, alignSelf: 'center', justifyContent: 'center', alignItems: 'center',
+          width: '92%', backgroundColor: 'black',
+          borderRadius: 10, height: 45, alignSelf: 'center', justifyContent: 'center', alignItems: 'center',
         }}
           onPress={handleSubmit}>
           <Text style={{ color: 'white' }}>submit</Text>
@@ -155,7 +139,7 @@ const Groc = () => {
           inverted={true}
           renderItem={({ item }) => {
             return (
-              
+
               <View style={{
                 borderRadius: 10, borderWidth: 1, padding: '3%', marginVertical: '2%', backgroundColor: 'lightblue',
                 flexDirection: 'row', justifyContent: 'space-between'
@@ -175,16 +159,16 @@ const Groc = () => {
                 <TouchableOpacity style={{
                   backgroundColor: 'lightgreen', borderWidth: 1,
                   padding: 10, borderRadius: 20, justifyContent: 'center', alignItems: 'center', width: '20%', height: 50,
-                }} onPress={()=>{remove(item.id)}}>
+                }} onPress={() => { remove(item.id) }}>
                   <Text style={{ color: 'black' }}>Delete</Text>
                 </TouchableOpacity>
               </View>
-              
+
             )
           }}
         />
       </View>
-      
+
     </View>
   )
 }
